@@ -15,7 +15,7 @@ def parse_return(data):
     FromUserName = xml_recv.find("FromUserName").text
     Content = xml_recv.find("Content").text
     Talk_json = Turing_talk(Content, FromUserName)
-    if Talk_json['code'] == 100000:
+    if Talk_json['code'] != 200000:
         reply = wx_template.text_reply
         Content = Talk_json['text']
         str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Content)

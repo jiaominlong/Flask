@@ -6,6 +6,7 @@ import urllib
 import json
 import xml.etree.ElementTree as ET
 import time
+import re
 
 def parse_return(data):
     xml_recv = ET.fromstring(data)
@@ -22,14 +23,14 @@ def Turing_talk(content,userid):
     values = {}
     values['key'] = 'db9fcfd70818ee5e7fb68e2d6d9a5a2c'
     values['info'] = content
-    values['userid'] = userid.replace('_', '')
+    values['userid'] = re.sub(r'[^a-zA-Z0-9]', '', userid)
     data = urllib.urlencode(values)
     url='http://www.tuling123.com/openapi/api?'
     full_url = url+data
     response = urllib2.urlopen(full_url)
     html = response.read()
     hjson = json.loads(html.decode('utf-8'))
-    return hjson['text']+values['userid']
+    return hjson['text']
     #print(hjson['code'])
     #print(hjson['text'])
     #print(html.decode('utf-8'))

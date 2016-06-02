@@ -15,21 +15,22 @@ def parse_return(data):
     FromUserName = xml_recv.find("FromUserName").text
     Content = xml_recv.find("Content").text
     Talk_json = Turing_talk(Content, FromUserName)
-    if Talk_json['code'] == 100000:
-        reply = wx_template.text_reply
-        Content = Talk_json['text']
-        str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Content)
-    if Talk_json['code'] == 200000:
-        wx_template.response_link(ToUserName, FromUserName, str(int(time.time())), Talk_json)
-        # reply = wx_template.link_reply
-        # Content = Talk_json['text']
-        # Url = Talk_json['url']
-        # print(Url)
-        # str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Talk_json['url'], Content)
+
+    
+    reply = wx_template.text_reply
+    Content = Talk_json['text']
+    str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Content)
+    # if Talk_json['code'] == 200000:
+    #     wx_template.response_link(ToUserName, FromUserName,str(int(time.time())) ,Talk_json)
+    #     # reply = wx_template.link_reply
+    #     # Content = Talk_json['text']
+    #     # Url = Talk_json['url']
+    #     # print(Url)
+    #     # str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Talk_json['url'], Content)
     return str_reply
 
 
-def Turing_talk(content,userid):
+def Turing_talk(content, userid):
     values = {}
     values['key'] = 'db9fcfd70818ee5e7fb68e2d6d9a5a2c'
     values['info'] = content

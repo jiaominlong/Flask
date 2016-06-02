@@ -5,32 +5,26 @@ import urllib2
 import urllib
 import json
 import xml.etree.ElementTree as ET
-import time
 import re
 from app import wx_template
 
+#receive weixin info
 def parse_return(data):
     xml_recv = ET.fromstring(data)
-    ToUserName = xml_recv.find("ToUserName").text
-    FromUserName = xml_recv.find("FromUserName").text
-    Content = xml_recv.find("Content").text
-    Talk_json = Turing_talk(Content, FromUserName)
+    receive_data = {}
+    receive_data['ToUserName'] = xml_recv.find("ToUserName").text
+    receive_data['FromUserName'] = xml_recv.find("FromUserName").text
+    if xml_recv.find("Content") != None:
+        receive_data['Content'] = xml_recv.find("Content").text
+    else:
+        receive_data['Content'] = xml_recv.find("Recognition").text
+
+    Talk_json = Turing_talk(receive_data['Content'], receive_data['FromUserName'])
+    return wx_template.Response_mach_message(receive_data, Talk_json)
 
 
-    reply = wx_template.text_reply
-    Content = Talk_json['text']
-    str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Content)
-    #之前正常版本
-    # if Talk_json['code'] == 200000:
-    #     wx_template.response_link(ToUserName, FromUserName,str(int(time.time())) ,Talk_json)
-    #     # reply = wx_template.link_reply
-    #     # Content = Talk_json['text']
-    #     # Url = Talk_json['url']
-    #     # print(Url)
-    #     # str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Talk_json['url'], Content)
-    return str_reply
 
-
+#Turing return message
 def Turing_talk(content, userid):
     values = {}
     values['key'] = 'db9fcfd70818ee5e7fb68e2d6d9a5a2c'
@@ -43,8 +37,5 @@ def Turing_talk(content, userid):
     html = response.read()
     hjson = json.loads(html.decode('utf-8'))
     return hjson
-    #print(hjson['code'])
-    #print(hjson['text'])
-    #print(html.decode('utf-8'))
 
 

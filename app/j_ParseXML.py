@@ -16,10 +16,11 @@ def parse_return(data):
     Content = xml_recv.find("Content").text
     Talk_json = Turing_talk(Content, FromUserName)
 
-    
+
     reply = wx_template.text_reply
     Content = Talk_json['text']
     str_reply = reply % (FromUserName, ToUserName, str(int(time.time())), Content)
+    #之前正常版本
     # if Talk_json['code'] == 200000:
     #     wx_template.response_link(ToUserName, FromUserName,str(int(time.time())) ,Talk_json)
     #     # reply = wx_template.link_reply
